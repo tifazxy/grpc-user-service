@@ -11,7 +11,7 @@ This project is a basic gRPC microservice in Python that manages user data. It s
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/yourusername/grpc-user-service.git
+git clone [url]
 cd grpc-user-service
 ```
 
