@@ -1,10 +1,11 @@
 syntax = "proto3";
 
-package user;
+package user_service;
 
 service UserService {
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
     rpc GetUser(GetUserRequest) returns (GetUserResponse);
+    rpc GetUserbyEmail(GetUserRequest) returns (GetUserResponse);
     rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
     rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
     rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
@@ -14,10 +15,12 @@ message User{
     string id = 1;
     string name = 2;
     string email = 3;
+    string password = 4;
 }
 message CreateUserRequest{
     string name = 1;
     string email = 2;
+    string password = 3;
 }
 message CreateUserResponse{
     User user = 1;
@@ -25,16 +28,21 @@ message CreateUserResponse{
 
 message GetUserRequest{
     string id = 1;
+    string email = 2;
 }
 
 message GetUserResponse{
     User user = 1;
 }
 
-message ListUsersRequest{}
+message ListUsersRequest{
+    int32 skip = 1;
+    int32 limit = 2;
+}
 
 message ListUsersResponse{
     repeated User users = 1;
+    int32 total = 2;
 }
 
 message UpdateUserRequest{
