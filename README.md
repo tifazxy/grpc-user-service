@@ -1,11 +1,23 @@
-# gRPC User Service (Python)
+# Backend Architecture Project – FastAPI & gRPC (Python)
 
-This project is a basic gRPC microservice in Python that manages user data. It supports creating, fetching, listing, updating, and deleting users.
+This project demonstrates a modular microservices backend architecture using FastAPI and gRPC, written in Python. It includes a user management service with authentication, persistent storage, and service orchestration.
 
+## Features
+- gRPC service defined with Protocol Buffers
+- Python implementation for both gRPC server and client
+- PostgreSQL-backed data store (and pluggable in-memory store for testing)
+- FastAPI gateway to expose RESTful APIs and aggregate service calls
+- OAuth2 + JWT-based authentication for secure access
+- Extensible design for future services (e.g., assets, stats, etc.)
 
-- Define gRPC service using Protocol Buffers
-- Python server and client implementation
-- In-memory store (easily swappable with PostgreSQL/SQLite)
+## Work In Progress
+
+These features are being actively developed and will be included in the next version:
+
+- Dockerized Setup: Dockerfile and Docker Compose to manage services and PostgreSQL.
+- CI/CD with Jenkins: Automating build, test, and deploy pipelines using Jenkins.
+- Testing Suite: Unit and integration tests for gRPC services and FastAPI gateway.
+- Structured Logging: Add consistent log formats across services for observability.
 
 ## Setup
 ### 1. Clone the repo
@@ -15,49 +27,62 @@ git clone [url]
 cd grpc-user-service
 ```
 
-### 2. Create virtual environment (optional)
+### 2. Create virtual environment (optional but recommended)
 ```bash
 python -m venv venv
 source venv/bin/activate
 ```
 ### 3. Install dependencies
+#### Install FastAPI gateway dependencies
 ```bash
-pip install -r requirements.txt
+pip install -r services/gateway/requirements.txt
+```
+#### Install user service dependencies
+```bash
+pip install -r services/user_service/requirements.txt
+```
+### 4. Add `.env` File
+```bash
+touch services/.env
+```
+#### Edit the file with the following content:
+```bash
+SECRET_KEY = '[secret_key]'
+ALGORITHM = 'HS256'
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+DB_URL = "postgresql://[username]:[password]@[db_ip]/[db_name]"
+```
+### 5. Create db tables
+Ensure the ownership is updated:
+```sql
+ALTER TABLE public.users OWNER TO [your_db_user];
+```
+Then load the schema:
+```sql
+psql -U <username> -d <your_db_name> -f docs/schema.sql
 ```
 ## Generate gRPC Code
 ```bash
-python -m grpc_tools.protoc -Iproto --python_out=. --grpc_python_out=. proto/user.proto
+make proto
 ```
 This generates:
-- user_pb2.py
-- user_pb2_grpc.py
+- services/user_pb2.py
+- services/user_pb2_grpc.py
 
 ## Run the Server
 ```bash
-python server.py
+make run-user
 ```
 
-## Open another terminal and Run the Client
+## Open another terminal and Run the Gateway
 ```bash
-python client.py
+make run-gateway
 ```
-Expected output:
+
+## Test via API Docs
+Once the gateway is running:
+Open your browser and go to:
 ```bash
-Creating user...
-User created: id: "..."
-name: "Alice"
-email: "alice@example.com"
-
-
-Getting user...
-User retrieved: id: "..."
-name: "Alice"
-email: "alice@example.com"
-
-
-Listing users...
-id: "..."
-name: "Alice"
-email: "alice@example.com"
+http://localhost:8000/docs
 ```
-
+![alt text](homepage.png?raw=true "API Docs")

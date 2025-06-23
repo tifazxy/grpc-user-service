@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from services.gateway import client, utils
-from config import (SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPERE_MINUTES)
+from config import (SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES)
 
 
 pwd_context = CryptContext(schemes=['bcrypt'])

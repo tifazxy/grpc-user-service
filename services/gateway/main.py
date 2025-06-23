@@ -7,7 +7,7 @@ from services.gateway.auth import(
     create_access_token,
     get_current_user,
     Token,
-    ACCESS_TOKEN_EXPERE_MINUTES
+    ACCESS_TOKEN_EXPIRE_MINUTES
 )
 from datetime import timedelta
 from services.gateway import utils
@@ -24,7 +24,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect username or password")
     access_token = create_access_token(
         data={'sub': user["email"]},
-        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPERE_MINUTES),
+        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     )
     return {"access_token":access_token, "token_type":"bearer"}
 
