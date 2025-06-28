@@ -3,7 +3,7 @@ pipeline {
   environment {
     VENV = 'venv'
     PYTHON = './venv/bin/python'
-    PIP = ./venv/bin/pip'
+    PIP = './venv/bin/pip'
   }
   stages {
     stage('Clone') {
