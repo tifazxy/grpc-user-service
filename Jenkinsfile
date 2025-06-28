@@ -16,7 +16,8 @@ pipeline {
       steps {
         sh 'python3 -m venv ${VENV}'
         sh '${PIP} install --upgrade pip'
-        sh '${PIP} install -r requirement.txt'
+        sh '${PIP} install -r services/user_service/requirements.txt'
+        sh '${PIP} install -r services/gateway/requirements.txt'
       }
     }
     stage('Generate Proto'){
