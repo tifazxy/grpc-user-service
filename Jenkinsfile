@@ -1,8 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'python:3.12-slim'
-      reuseNode true
+      image 'tifazxy/python-grpc-ci:3.12-slim'
     }
   }
   environment {
